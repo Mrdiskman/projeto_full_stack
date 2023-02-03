@@ -1,23 +1,28 @@
-import { database } from "../../database";
+import { User } from "../../entities/user.entity";
 import { IUserCreate, IUser } from "../../interfaces/user";
-import {v4 as uuidv4} from "uuid"
+import { AppDataSource } from "../../data-source";
+import bcrypt from "bcrypt"
+import { AppError } from "../../errors/appError";
 
-const userCreateService = ({email, name, password, phone}:IUserCreate) => {
-    const emailAlredyExist = database.find((user)=> user.email === email)
+const userCreateService = async({email, name, password, number}:IUserCreate) : Promise<IUser> => {
+    const userRepository = AppDataSource.getRepository(User)
+    const users = await userRepository.find()
+    const emailAlredyExist = users.find((user)=> user.email === email)
+
     if(emailAlredyExist){
-        throw new Error("Email alredy exists")
+        throw new AppError(409, "Email Alredy Exists")
     }
 
-    const newUser:IUser={
-        id:uuidv4(),
-        name,
-        email,
-        password, 
-        phone
-    }
+    const user:IUser = new User()
+    user.name = name,
+    user.email= email,
+    user.password = bcrypt.hashSync(password, 10),
+    user.number = number
 
-    database.push(newUser)
-    return newUser
+    userRepository.create(user)
+    await userRepository.save(user)
+
+    return user
 }
 
 export default userCreateService

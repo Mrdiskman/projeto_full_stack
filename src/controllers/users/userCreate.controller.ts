@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
+import { AppError, handleError } from "../../errors/appError";
 import userCreateService from "../../services/users/createUser.service";
 
-const userCreateController = (req:Request, res:Response) =>{
+const userCreateController = async (req:Request, res:Response) =>{
     try{
-        const {email, name, password, phone } = req.body
-        const newUser = userCreateService({email, name, password, phone})
-        return res.status(201).send(newUser)
+        const user = req.body
+        const newUser = await userCreateService(user)
+        const { password, ...rest } = newUser;
+        return res.status(201).send(rest)
     }
     catch(err){
-        if(err instanceof Error){
-            return res.status(400).send({
-                status: err.name,
-                message: err.message
-            })
+        if(err instanceof AppError){
+            handleError(err, res)
         }
     }
 }
+
 
 export default userCreateController

@@ -1,8 +1,7 @@
 import { DataSource } from "typeorm";
+import "dotenv/config" 
 
-require("dotenv").config();
-
-export const appDataSource = new DataSource({
+export const AppDataSource = new DataSource({
     type:"postgres",
     host:"localhost",
     port:5432,
@@ -13,12 +12,6 @@ export const appDataSource = new DataSource({
 
     synchronize: false,
     logging: true,
-    // entities: [User],
+    entities: ["src/entities/*.ts"],
     migrations: ["src/migrations/*.ts"]
-})
-
-appDataSource.initialize()
-.then(()=>{console.log("Data Source Initialized")})
-.catch((err)=>{
-    console.error("Error during Data Source Initialization", err)
 })
