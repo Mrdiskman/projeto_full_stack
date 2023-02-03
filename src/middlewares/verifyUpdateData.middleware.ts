@@ -1,23 +1,22 @@
 import { Request, Response, NextFunction } from "express";
-import bcrypt, { hash } from "bcrypt"
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { AppError, handleError } from "../errors/appError";
 
-export const verifyLoginMiddleware = async(req:Request, res:Response, next:NextFunction)=>{
+export const verifyUpdatedData = async(req:Request, res:Response, next:NextFunction)=>{
     try{
         let {email, password, name} = req.body
         const id = req.idUser
         const usersRepository = AppDataSource.getRepository(User);
         const user = await usersRepository.findOneBy({ id });
+
+        if (email == ""|| password == "" || name == "")
+        throw new AppError(400, "Can't Update To A Empty Field")
         
         if (!name && !email && !password) {
             return user;
           }
         
-        if (password) {
-            password = await hash(password, 10);
-          }
         next() 
     }
     catch(err){
@@ -27,4 +26,4 @@ export const verifyLoginMiddleware = async(req:Request, res:Response, next:NextF
     }
 }
 
-export default verifyLoginMiddleware
+export default verifyUpdatedData
