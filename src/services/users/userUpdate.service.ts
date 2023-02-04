@@ -2,6 +2,7 @@ import { hash } from "bcrypt";
 import { AppDataSource } from "../../data-source"
 import { User } from "../../entities/user.entity"
 import { IUserUpdate } from "../../interfaces/user"
+import * as moment from 'moment';
 
 const updateUserService = async(id:string, newData:IUserUpdate) =>{
     if (newData.password) {
