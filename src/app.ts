@@ -2,10 +2,12 @@ import express, { NextFunction, Response, Request} from "express"
 import { AppError } from "./errors/appError"
 import userRoutes from "./routes/users/user.routes"
 import contactRoutes from "./routes/contacts/contacts.routes"
+import cors from "cors"
 
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 app.use("", userRoutes)
 app.use("", contactRoutes)
 
