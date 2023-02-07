@@ -2,7 +2,6 @@
 
 ## Projeto Realizado com:
   * NodeJs, Express, React
-  * 
 ### Descrição
 O desafio consiste criar um projeto back end e um front end e fazer eles conversarem entre si
 
