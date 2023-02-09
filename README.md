@@ -14,6 +14,11 @@ yarn install
 
 **Atenção:** é necessario preencher o dotenv com base no .env.example
 
+Primeiramente gere as migrations 
+```
+yarn typeorm migration:generate src/migrations/startProject -d src/data-source.ts
+```
+
 Agora é necessario usar o comando para aplicar as migrações 
 
 ```
